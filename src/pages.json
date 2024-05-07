@@ -1,0 +1,88 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/ground/ground",
+			"style": {
+				"navigationBarTitleText": "场馆详情",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/contact/contact",
+			"style": {
+				"navigationBarTitleText": "客服中心",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/question/question",
+			"style": {
+				"navigationBarTitleText": "问题详情",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/profile/profile",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "注册登录",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/wallet/wallet",
+			"style": {
+				"navigationBarTitleText": "我的钱包",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/recharge/recharge",
+			"style": {
+				"navigationBarTitleText": "会员充值",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": false,
+				// 设置当滑动到离页面底部多少距离时触发onReachBottom
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/reward/reward",
+			"style": {
+				"navigationBarTitleText": "奖品兑换",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/about/about",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "共享足球",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
