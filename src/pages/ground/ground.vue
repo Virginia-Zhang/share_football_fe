@@ -73,24 +73,26 @@
 <script setup>
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
-import { getGroundInfoById } from '../../pages-data';
+import api from '../../api';
+
 const groundInfo = ref(null);
 
 onLoad((options) => {
 	// 获取url里的id参数，并转换为数字类型
 	if (options.id) {
-		groundInfo.value = getGroundInfoById(+options.id);
-		console.log('groundInfo', groundInfo.value);
+		api.getStadiumInfoById(+options.id).then((result) => {
+			groundInfo.value = result;
+		});
 	}
 });
 
 const handleTap = () => {
 	// 点击地址右侧的导航图标，打开场馆位置对应的地图
 	uni.openLocation({
-		latitude: groundInfo.value.marker.latitude,
-		longitude: groundInfo.value.marker.longitude,
-		name: groundInfo.value.marker.title,
-		address: groundInfo.value.marker.address
+		latitude: +groundInfo.value.latitude,
+		longitude: +groundInfo.value.longitude,
+		name: groundInfo.value.title,
+		address: groundInfo.value.address
 		// success(res) {
 		// 	console.log('res', res);
 		// },

@@ -43,13 +43,14 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { markers } from '../../pages-data';
+import api from '../../api';
 
 const longitude = ref(0);
 const latitude = ref(0);
 const currentMarker = ref(null);
 // 是否为扫码借还
 const isScan = ref(true);
+const markers = ref([]);
 
 onLoad(() => {
 	uni.getLocation({
@@ -61,11 +62,26 @@ onLoad(() => {
 			console.log('err', err);
 		}
 	});
+
+	// 发送请求，获取场馆列表
+	api.getStadiumList().then((result) => {
+		// 给每个item添加上width, height属性，并对latitude和longitude的值做处理
+		markers.value = result.map((item) => {
+			return {
+				...item,
+				width: 40,
+				height: 40,
+				// latitude和longitude直接从数据库里取出来都是字符串，需要转成数字
+				latitude: +item.latitude,
+				longitude: +item.longitude
+			};
+		});
+	});
 });
 
 const handleMarkerTap = (e) => {
 	// 根据markerId，去markers数组里找到对应的marker，赋值给currentMarker
-	const marker = markers.find((item) => item.id === e.detail.markerId);
+	const marker = markers.value.find((item) => item.id === e.detail.markerId);
 	currentMarker.value = marker;
 	console.log('currentMarker:', currentMarker.value);
 	// 修改isScan，让marker信息展示出来
