@@ -1,5 +1,8 @@
 <script>
 export default {
+	globalData: {
+		contactQuestion: []
+	},
 	onLaunch: function () {
 		console.log('App Launch');
 	},

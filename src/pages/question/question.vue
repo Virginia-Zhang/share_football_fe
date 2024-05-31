@@ -3,7 +3,7 @@
 		<view v-for="(item, index) in list" :key="item.id" class="question-card">
 			<view class="question-title">{{ index + 1 }}. {{ item.title }}</view>
 			<view class="question-desc">
-				{{ item.desc }}
+				{{ item.answer }}
 			</view>
 		</view>
 	</view>
@@ -12,12 +12,17 @@
 <script setup>
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { getContactQuestionByType } from '../../pages-data';
 
+const app = getApp();
+// 各问题分类对应的问题列表
 const list = ref([]);
+
 onLoad((options) => {
 	if (options.type) {
-		list.value = getContactQuestionByType(+options.type);
+		// 从全局对象上获取contactQuestion数组，使用find方法找出item.id等于+options.type的item，然后再返回其details数组，赋值给list.value
+		const { contactQuestion } = app.globalData;
+		const questionType = contactQuestion.find((item) => item.id === +options.type);
+		list.value = questionType.details;
 	}
 });
 </script>

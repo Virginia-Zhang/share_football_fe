@@ -23,11 +23,50 @@
 
 <script setup>
 import { ref } from 'vue';
-import { contactQuestion } from '../../pages-data';
+// import { contactQuestion } from '../../pages-data';
+import { onLoad } from '@dcloudio/uni-app';
+import api from '../../api';
+
+const contactQuestion = ref([]);
+const app = getApp();
+
+onLoad(() => {
+	api.getContactQuestion().then((result) => {
+		// result数组里的每项还缺src属性，即每个问题分类对应的icon，需要前端手动添加上
+		let src;
+		// 把contactQuestion数组也放到全局变量上，以方便question.vue使用
+		app.globalData.contactQuestion = contactQuestion.value = result.map((item) => {
+			switch (item.id) {
+				case 1:
+					src = '/static/flow.png';
+					break;
+				case 2:
+					src = '/static/machine.png';
+					break;
+				case 3:
+					src = '/static/deposit.png';
+					break;
+				case 4:
+					src = '/static/order.png';
+					break;
+				case 5:
+					src = '/static/repair.png';
+					break;
+				case 6:
+					src = '/static/more.png';
+					break;
+			}
+			return {
+				...item,
+				src
+			};
+		});
+	});
+});
 
 const handleItemTap = (item) => {
 	uni.navigateTo({
-		url: `/pages/question/question?type=${item.type}`
+		url: `/pages/question/question?type=${item.id}`
 	});
 };
 
