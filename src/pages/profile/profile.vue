@@ -2,11 +2,15 @@
 	<view class="background">
 		<view class="profile-box">
 			<view class="profile-top">
-				<view v-if="isLogin" class="profile-user">
-					<image class="user-avatar" src="../../static/avatar.jfif" mode="widthFix"></image>
-					<view class="user-nickname ellipsis">哈喽武德哈喽武德哈喽武德哈喽武德哈喽武德哈喽武德</view>
+				<!-- 点击用户信息区域，跳转至登录页，可修改用户信息 -->
+				<view class="profile-user" @tap="handleUserTap">
+					<image
+						class="user-avatar"
+						:src="userInfo.avatar || '../../static/avatar.jfif'"
+						mode="widthFix"
+					></image>
+					<view class="user-nickname ellipsis">{{ userInfo.username }}</view>
 				</view>
-				<button v-else class="button" @tap="handleTap">点击登录</button>
 			</view>
 			<view class="profile-bottom">
 				<view class="item" v-for="item in list" :key="item.id" @tap="handleItemTap(item)">
@@ -22,13 +26,13 @@
 <script setup>
 import { ref } from 'vue';
 
-const isLogin = ref(false);
+const app = getApp();
+const { userInfo } = app.globalData;
 
-const handleTap = () => {
+const handleUserTap = () => {
 	uni.navigateTo({
 		url: '/pages/login/login'
 	});
-	isLogin.value = true;
 };
 
 // 个人中心功能列表

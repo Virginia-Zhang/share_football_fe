@@ -37,7 +37,7 @@
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": "注册登录",
+				"navigationBarTitleText": "注册登录/修改信息",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -75,6 +75,13 @@
 			"path": "pages/about/about",
 			"style": {
 				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/update/update",
+			"style": {
+				"navigationBarTitleText": "修改密码",
 				"enablePullDownRefresh": false
 			}
 		}

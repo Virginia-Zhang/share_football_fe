@@ -1,7 +1,9 @@
 <script>
 export default {
 	globalData: {
-		contactQuestion: []
+		contactQuestion: [],
+		token: uni.getStorageSync('token') || null,
+		userInfo: uni.getStorageSync('userInfo') || { username: '', avatar: '', amount: '' }
 	},
 	onLaunch: function () {
 		console.log('App Launch');

@@ -52,6 +52,9 @@ const currentMarker = ref(null);
 const isScan = ref(true);
 const markers = ref([]);
 
+const app = getApp();
+const { token } = app.globalData;
+
 onLoad(() => {
 	uni.getLocation({
 		success(res) {
@@ -145,10 +148,25 @@ const handleImageTap = (id) => {
 			mapContext.moveToLocation();
 			break;
 		case 4:
-			// 跳转到个人中心页面
-			uni.navigateTo({
-				url: '/pages/profile/profile'
-			});
+			// 跳转到个人中心页面，跳转前做登录校验
+			if (!token) {
+				uni.showModal({
+					title: '尚未登录',
+					content: '点击确认进行登录',
+					success: (res) => {
+						// 点击确认，跳转至登录页
+						if (res.confirm) {
+							uni.navigateTo({
+								url: '/pages/login/login'
+							});
+						}
+					}
+				});
+			} else {
+				uni.navigateTo({
+					url: '/pages/profile/profile'
+				});
+			}
 			break;
 		default:
 			break;
