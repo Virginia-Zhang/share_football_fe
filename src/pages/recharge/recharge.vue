@@ -2,7 +2,7 @@
 	<view class="recharge-box">
 		<view class="recharge-desc">
 			当前账户余额：
-			<text>100.00</text>
+			<text>{{ userInfo.amount }}</text>
 			元
 		</view>
 		<view class="recharge-list">
@@ -21,6 +21,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import api from '../../api/';
+import { clearOldInfo } from '../../utils';
+
+const userInfo = uni.getStorageSync('userInfo');
 
 const list = [
 	{ id: 1, amount: 10 },
@@ -44,9 +48,9 @@ const handleBtnTap = () => {
 		content: `充值金额为 ${activeItem.amount} 元`,
 		success: function (res) {
 			if (res.confirm) {
-				console.log('确认充值');
-			} else if (res.cancel) {
-				console.log('取消充值');
+				api.recharge({ amount: activeItem.amount }).then((res) => {
+					clearOldInfo();
+				});
 			}
 		}
 	});

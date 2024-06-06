@@ -4,6 +4,7 @@ import registerApi from './register'
 import loginApi from './login'
 import uploadApi from './upload'
 import updateApi from './update'
+import rechargeApi from './recharge'
 
 export default {
 	...stadiumApi,
@@ -11,5 +12,6 @@ export default {
 	...registerApi,
 	...loginApi,
 	...uploadApi,
-	...updateApi
+	...updateApi,
+	...rechargeApi
 }

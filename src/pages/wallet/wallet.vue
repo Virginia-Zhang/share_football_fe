@@ -4,13 +4,15 @@
 		<view class="wallet-title">我的钱包</view>
 		<view class="wallet-amount">
 			<text class="amount-symbol">¥</text>
-			<text>100.00</text>
+			<text>{{ userInfo.amount }}</text>
 		</view>
 		<button class="button" @tap="handleTap">立即充值</button>
 	</view>
 </template>
 
 <script setup>
+const userInfo = uni.getStorageSync('userInfo');
+
 const handleTap = () => {
 	uni.navigateTo({
 		url: '/pages/recharge/recharge'

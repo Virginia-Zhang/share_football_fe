@@ -1,5 +1,4 @@
 // 注册API
-import myRequest from '../request'
 import upload from "../upload";
 
 export default {
