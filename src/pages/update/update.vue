@@ -28,6 +28,8 @@
 
 <script setup>
 import { ref } from 'vue';
+import api from '../../api';
+import { clearOldInfo } from '../../utils';
 
 const oldPwd = ref('');
 const newPwd = ref('');
@@ -68,11 +70,41 @@ const handleUpdate = () => {
 		content: '确认修改密码？',
 		success(res) {
 			if (res.confirm) {
-				console.log('updatePwd', {
+				const data = {
 					oldPwd: oldPwd.value,
-					newPwd: newPwd.value,
-					confirmPwd: confirmPwd.value
-				});
+					newPwd: newPwd.value
+				};
+				api.updateUserPwd(data)
+					.then((result) => {
+						if (result.code == 0) {
+							uni.showToast({
+								title: result.data || '更新密码成功',
+								icon: 'none',
+								mask: true,
+								duration: 2000,
+								complete() {
+									clearOldInfo();
+								}
+							});
+						} else {
+							const msg = result.message === 'oldPwd incorrect' ? '旧密码输入错误！' : result.message;
+							uni.showToast({
+								title: msg || '更新密码失败',
+								icon: 'none',
+								mask: true,
+								duration: 2000
+							});
+						}
+					})
+					.catch((e) => {
+						console.error('Error during registration:', e);
+						uni.showToast({
+							title: '请求失败，请重试',
+							icon: 'none',
+							mask: true,
+							duration: 2000
+						});
+					});
 			}
 		}
 	});

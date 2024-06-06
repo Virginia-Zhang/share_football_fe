@@ -2,10 +2,14 @@ import stadiumApi from './stadium'
 import contactApi from './contact'
 import registerApi from './register'
 import loginApi from './login'
+import uploadApi from './upload'
+import updateApi from './update'
 
 export default {
 	...stadiumApi,
 	...contactApi,
 	...registerApi,
-	...loginApi
+	...loginApi,
+	...uploadApi,
+	...updateApi
 }

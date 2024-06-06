@@ -6,6 +6,7 @@ class Request {
 
 	request(url, data, method) {
 		return new Promise((resolve, reject) => {
+			const token = uni.getStorageSync('token');
 			// 先展示Loading框
 			uni.showLoading({
 				title: 'Loading...',
@@ -17,6 +18,9 @@ class Request {
 				data,
 				method,
 				timeout: 60000,
+				header: {
+					'Authorization': token ? `Bearer ${token}` : ''
+				},
 				success: (res) => {
 					resolve(res.data)
 				},
