@@ -5,6 +5,7 @@ import loginApi from './login'
 import uploadApi from './upload'
 import updateApi from './update'
 import rechargeApi from './recharge'
+import rewardApi from './reward'
 
 export default {
 	...stadiumApi,
@@ -13,5 +14,6 @@ export default {
 	...loginApi,
 	...uploadApi,
 	...updateApi,
-	...rechargeApi
+	...rechargeApi,
+	...rewardApi
 }

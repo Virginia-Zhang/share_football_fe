@@ -1,13 +1,7 @@
 <template>
 	<view class="cdk-box">
 		<view class="input-box">
-			<input
-				v-model="inputValue"
-				class="input"
-				type="number"
-				:maxlength="10"
-				placeholder="请输入您的奖品兑换码"
-			/>
+			<input v-model="inputValue" class="input" placeholder="请输入您的奖品兑换码" />
 		</view>
 		<button class="button" @tap="handleTap">立即兑换</button>
 	</view>
@@ -15,10 +9,18 @@
 
 <script setup>
 import { ref } from 'vue';
+import api from '../../api';
 
 const inputValue = ref('');
-const handleTap = () => {
-	console.log('inputValue', inputValue.value);
+const handleTap = async () => {
+	if (!inputValue.value) {
+		return uni.showToast({
+			title: '奖品兑换码不能为空！',
+			icon: 'none',
+			mask: true
+		});
+	}
+	await api.reward({ code: inputValue.value });
 };
 </script>
 
