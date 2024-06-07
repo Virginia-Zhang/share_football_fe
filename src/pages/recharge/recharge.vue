@@ -48,9 +48,38 @@ const handleBtnTap = () => {
 		content: `充值金额为 ${activeItem.amount} 元`,
 		success: function (res) {
 			if (res.confirm) {
-				api.recharge({ amount: activeItem.amount }).then((res) => {
-					clearOldInfo();
-				});
+				api.recharge({ amount: activeItem.amount })
+					.then((result) => {
+						if (result.code == 0) {
+							uni.showToast({
+								title: result.data,
+								icon: 'none',
+								mask: true,
+								duration: 2000,
+								complete() {
+									// 充值成功，再清空用户数据让用户重新登陆，否则不用
+									if (result.data === '充值成功') clearOldInfo();
+								}
+							});
+						} else {
+							const message = result.message === 'amount invalid' ? '充值金额不能为空！' : result.message;
+							uni.showToast({
+								title: message || '充值失败',
+								icon: 'none',
+								mask: true,
+								duration: 2000
+							});
+						}
+					})
+					.catch((err) => {
+						console.error('Error during registration:', err);
+						uni.showToast({
+							title: '请求失败，请重试',
+							icon: 'none',
+							mask: true,
+							duration: 2000
+						});
+					});
 			}
 		}
 	});
