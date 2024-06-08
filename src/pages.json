@@ -7,6 +7,15 @@
 			}
 		},
 		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": false,
+				// 设置当滑动到离页面底部多少距离时触发onReachBottom
+				"onReachBottomDistance": 50
+			}
+		},
+		{
 			"path": "pages/ground/ground",
 			"style": {
 				"navigationBarTitleText": "场馆详情",
@@ -53,15 +62,6 @@
 			"style": {
 				"navigationBarTitleText": "会员充值",
 				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/order/order",
-			"style": {
-				"navigationBarTitleText": "我的订单",
-				"enablePullDownRefresh": false,
-				// 设置当滑动到离页面底部多少距离时触发onReachBottom
-				"onReachBottomDistance": 50
 			}
 		},
 		{
