@@ -55,6 +55,9 @@ const markers = ref([]);
 const app = getApp();
 const { token } = app.globalData;
 
+// 从storage里取出orderNo, userInfo
+const storageOrderNo = uni.getStorageSync('orderNo');
+
 onLoad(() => {
 	uni.getLocation({
 		success(res) {
@@ -91,10 +94,125 @@ const handleMarkerTap = (e) => {
 	isScan.value = false;
 };
 
+// 结束订单后，清空storage和globalData里的orderNo
+// 还需要从后端返回的数据中拿到用户的新余额newAmount，再把storage和gloabalData里userInfo中的amount更新为newAmount，实现在用户不重新登陆的情况下更新用户数据的效果，优化用户体验
+const clearOrderData = (newAmount) => {
+	return new Promise((resolve, reject) => {
+		app.globalData.orderNo = '';
+		uni.removeStorageSync('orderNo');
+
+		app.globalData.userInfo.amount = newAmount;
+		const userInfo = uni.getStorageSync('userInfo');
+		userInfo.amount = newAmount;
+		uni.setStorageSync('userInfo', userInfo);
+		resolve();
+	});
+};
+
 const handleScan = () => {
+	// 先做登录鉴权，没登录的话让用户去登录，登录了再允许扫码创建或结束订单
+	if (!token) {
+		return uni.showModal({
+			title: '尚未登录',
+			content: '点击确认进行登录',
+			success: (res) => {
+				// 点击确认，跳转至登录页
+				if (res.confirm) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					});
+				}
+			}
+		});
+	}
 	uni.scanCode({
-		success(res) {
-			console.log('res', res.result.split('=')[1]);
+		async success(res) {
+			// orderNo为空，说明是创建订单
+			if (!storageOrderNo) {
+				const stadiumId = res.result.split('=')[1];
+				const result = await api.createOrder({ stadiumId });
+				if (result.code == 0) {
+					const orderNo = result.data.orderNo;
+					// 创建订单成功，弹窗提示创建成功，并把orderNo保存到globalData和storage
+					if (orderNo) {
+						uni.showToast({
+							title: '创建订单成功！',
+							icon: 'none',
+							mask: true,
+							duration: 3000,
+							complete() {
+								app.globalData.orderNo = orderNo;
+								uni.setStorage({
+									key: 'orderNo',
+									data: orderNo,
+									success(res) {
+										uni.reLaunch({
+											url: '/pages/index/index'
+										});
+									}
+								});
+							}
+						});
+					} else {
+						// 创建订单失败，弹窗提示创建失败
+						uni.showToast({
+							title: '订单创建失败！请重试',
+							icon: 'none',
+							mask: true,
+							duration: 3000
+						});
+					}
+				} else {
+					// 创建订单失败，弹窗提示创建失败
+					uni.showToast({
+						title: result.message,
+						icon: 'none',
+						mask: true,
+						duration: 3000
+					});
+				}
+			} else {
+				// orderNo不为空，说明是结束订单
+				const result = await api.finishOrder({ orderNo: storageOrderNo });
+				if (result.code == 0) {
+					// 判断返回的data的msg是否为“订单完成”，如果是则说明订单结束成功，否则没成功
+					if (result.data.msg === '订单完成！') {
+						// 订单成功结束，把orderNo从storage, globalData里清除，更新用户余额，并刷新APP
+						clearOrderData(result.data.newAmount)
+							.then(() => {
+								uni.showToast({
+									title: result.data.msg,
+									icon: 'none',
+									mask: true,
+									complete() {
+										uni.reLaunch({
+											url: '/pages/index/index'
+										});
+									}
+								});
+							})
+							.catch((error) => {
+								console.error('Error clearing order data:', error);
+							});
+					} else {
+						// 余额不足无法支付订单，弹窗提示用户去充值
+						uni.showToast({
+							title: result.data,
+							icon: 'none',
+							mask: true,
+							duration: 3000
+						});
+					}
+				} else {
+					// 订单结束失败
+					uni.showToast({
+						title: result.message,
+						icon: 'none',
+						mask: true,
+						duration: 3000
+					});
+				}
+			}
 		}
 	});
 };

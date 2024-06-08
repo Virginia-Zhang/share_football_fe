@@ -4,7 +4,7 @@
 		<view class="wallet-title">我的钱包</view>
 		<view class="wallet-amount">
 			<text class="amount-symbol">¥</text>
-			<text>{{ userInfo.amount }}</text>
+			<text>{{ Number(userInfo.amount).toFixed(2) }}</text>
 		</view>
 		<button class="button" @tap="handleTap">立即充值</button>
 	</view>

@@ -19,15 +19,20 @@
 					<image class="item-right" src="../../static/forward.png" mode="widthFix"></image>
 				</view>
 			</view>
+			<!-- 退出登录按钮 -->
+			<button type="primary" @tap="handleLogout">退出登录</button>
 		</view>
 	</view>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { clearOldInfo } from '../../utils';
 
 const app = getApp();
 const { userInfo } = app.globalData;
+
+const orderNo = uni.getStorageSync('orderNo');
 
 const handleUserTap = () => {
 	uni.navigateTo({
@@ -86,6 +91,19 @@ const handleItemTap = (item) => {
 		url: item.path
 	});
 };
+
+// 退出登录，要先校验当前用户是否有正在进行的订单，如果有的话不允许退出，没有再退出
+const handleLogout = () => {
+	if (orderNo) {
+		return uni.showToast({
+			title: '您有正在进行的订单，请完成付款后再退出登录！',
+			icon: 'none',
+			mask: 'true',
+			duration: 3000
+		});
+	}
+	clearOldInfo();
+};
 </script>
 
 <style scoped lang="scss">
@@ -126,6 +144,7 @@ const handleItemTap = (item) => {
 	.profile-bottom {
 		background-color: white;
 		border-radius: 10rpx;
+		margin-bottom: 40rpx;
 
 		.item {
 			display: flex;

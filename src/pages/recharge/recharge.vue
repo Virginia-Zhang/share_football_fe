@@ -2,7 +2,7 @@
 	<view class="recharge-box">
 		<view class="recharge-desc">
 			当前账户余额：
-			<text>{{ userInfo.amount }}</text>
+			<text>{{ Number(userInfo.amount).toFixed(2) }}</text>
 			元
 		</view>
 		<view class="recharge-list">
@@ -24,6 +24,7 @@ import { ref } from 'vue';
 import api from '../../api/';
 import { clearOldInfo } from '../../utils';
 
+const app = getApp();
 const userInfo = uni.getStorageSync('userInfo');
 
 const list = [
@@ -51,23 +52,40 @@ const handleBtnTap = () => {
 				api.recharge({ amount: activeItem.amount })
 					.then((result) => {
 						if (result.code == 0) {
-							uni.showToast({
-								title: result.data,
-								icon: 'none',
-								mask: true,
-								duration: 2000,
-								complete() {
-									// 充值成功，再清空用户数据让用户重新登陆，否则不用
-									if (result.data === '充值成功') clearOldInfo();
-								}
-							});
+							const { newAmount, msg } = result.data;
+							// 充值成功，orderStatus为1，返回的data为对象，包含newAmount, msg
+							if (newAmount) {
+								uni.showToast({
+									title: msg,
+									icon: 'none',
+									mask: true,
+									duration: 3000,
+									complete() {
+										// 充值成功，更新storage和globalData里的用户余额，再刷新APP
+										app.globalData.userInfo.amount = newAmount;
+										userInfo.amount = newAmount;
+										uni.setStorageSync('userInfo', userInfo);
+										uni.reLaunch({
+											url: '/pages/index/index'
+										});
+									}
+								});
+							} else {
+								// 充值失败，orderStatus为0，返回的data为一个字符串'充值失败'
+								uni.showToast({
+									title: result.data,
+									icon: 'none',
+									mask: true,
+									duration: 3000
+								});
+							}
 						} else {
 							const message = result.message === 'amount invalid' ? '充值金额不能为空！' : result.message;
 							uni.showToast({
 								title: message || '充值失败',
 								icon: 'none',
 								mask: true,
-								duration: 2000
+								duration: 3000
 							});
 						}
 					})
@@ -77,7 +95,7 @@ const handleBtnTap = () => {
 							title: '请求失败，请重试',
 							icon: 'none',
 							mask: true,
-							duration: 2000
+							duration: 3000
 						});
 					});
 			}

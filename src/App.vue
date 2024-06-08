@@ -3,7 +3,8 @@ export default {
 	globalData: {
 		contactQuestion: [],
 		token: uni.getStorageSync('token') || null,
-		userInfo: uni.getStorageSync('userInfo') || { username: '', avatar: '', amount: '' }
+		userInfo: uni.getStorageSync('userInfo') || { username: '', avatar: '', amount: '' },
+		orderNo: ''
 	},
 	onLaunch: function () {
 		console.log('App Launch');
