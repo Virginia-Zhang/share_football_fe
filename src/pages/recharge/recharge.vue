@@ -22,7 +22,8 @@
 <script setup>
 import { ref } from 'vue';
 import api from '../../api/';
-import { clearOldInfo } from '../../utils';
+import { clearOldInfo, verifyLogin } from '../../utils';
+import { onShow } from '@dcloudio/uni-app';
 
 const app = getApp();
 const userInfo = uni.getStorageSync('userInfo');
@@ -35,6 +36,10 @@ const list = [
 ];
 
 const activeIndex = ref(0);
+
+onShow(() => {
+	verifyLogin();
+});
 
 const handleItemTap = (index) => {
 	activeIndex.value = index;

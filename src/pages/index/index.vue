@@ -41,9 +41,10 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { ref } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import api from '../../api';
+import { verifyLogin } from '../../utils';
 
 const longitude = ref(0);
 const latitude = ref(0);
@@ -83,6 +84,11 @@ onLoad(() => {
 			};
 		});
 	});
+});
+
+onShow(() => {
+	// 首页加载，验证登录是否过期
+	verifyLogin();
 });
 
 const handleMarkerTap = (e) => {

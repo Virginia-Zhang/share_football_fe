@@ -11,7 +11,14 @@
 </template>
 
 <script setup>
+import { verifyLogin } from '../../utils';
+import { onShow } from '@dcloudio/uni-app';
+
 const userInfo = uni.getStorageSync('userInfo');
+
+onShow(() => {
+	verifyLogin();
+});
 
 const handleTap = () => {
 	uni.navigateTo({

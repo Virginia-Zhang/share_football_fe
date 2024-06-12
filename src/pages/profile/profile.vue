@@ -27,12 +27,17 @@
 
 <script setup>
 import { ref } from 'vue';
-import { clearOldInfo } from '../../utils';
+import { clearOldInfo, verifyLogin } from '../../utils';
+import { onShow } from '@dcloudio/uni-app';
 
 const app = getApp();
 const { userInfo } = app.globalData;
 
 const orderNo = uni.getStorageSync('orderNo');
+
+onShow(() => {
+	verifyLogin();
+});
 
 const handleUserTap = () => {
 	uni.navigateTo({

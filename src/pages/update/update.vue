@@ -29,11 +29,16 @@
 <script setup>
 import { ref } from 'vue';
 import api from '../../api';
-import { clearOldInfo } from '../../utils';
+import { clearOldInfo, verifyLogin } from '../../utils';
+import { onShow } from '@dcloudio/uni-app';
 
 const oldPwd = ref('');
 const newPwd = ref('');
 const confirmPwd = ref('');
+
+onShow(() => {
+	verifyLogin();
+});
 
 const handleOldPwdChange = (e) => {
 	oldPwd.value = e.detail.value;

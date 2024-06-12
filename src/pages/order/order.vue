@@ -15,8 +15,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { onLoad, onReachBottom } from '@dcloudio/uni-app';
+import { onLoad, onReachBottom, onShow } from '@dcloudio/uni-app';
 import api from '../../api/index.js';
+import { verifyLogin } from '../../utils/index.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -67,6 +68,10 @@ onLoad(async () => {
 			duration: durationConvert(new Date(item.createAt), new Date(item.updateAt))
 		};
 	});
+});
+
+onShow(() => {
+	verifyLogin();
 });
 
 // 当页面滑动到底部时触发，可展示下一页的数据，类似于PC项目中的分页功能

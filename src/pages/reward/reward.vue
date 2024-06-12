@@ -10,8 +10,15 @@
 <script setup>
 import { ref } from 'vue';
 import api from '../../api';
+import { verifyLogin } from '../../utils';
+import { onShow } from '@dcloudio/uni-app';
 
 const inputValue = ref('');
+
+onShow(() => {
+	verifyLogin();
+});
+
 const handleTap = async () => {
 	if (!inputValue.value) {
 		return uni.showToast({

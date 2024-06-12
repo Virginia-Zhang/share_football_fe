@@ -1,4 +1,6 @@
 <script>
+import { clearOldInfo, verifyLogin } from './utils';
+
 export default {
 	globalData: {
 		contactQuestion: [],
@@ -8,6 +10,8 @@ export default {
 	},
 	onLaunch: function () {
 		console.log('App Launch');
+		// 用户打开小程序时，进行登录是否过期的校验
+		verifyLogin();
 	},
 	onShow: function () {
 		console.log('App Show');
