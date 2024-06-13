@@ -79,17 +79,11 @@ const handleTap = async (type) => {
 		app.globalData.token = token;
 		app.globalData.userInfo = userInfo;
 
-		uni.setStorage({
-			key: 'token',
-			data: token
-		});
-		uni.setStorage({
-			key: 'userInfo',
-			data: userInfo
-		});
+		uni.setStorageSync('token', token);
+		uni.setStorageSync('userInfo', userInfo);
 
-		// 重新启动小程序，以获取最新的token和userInfo，否则就要手动重新编译才能拿到
-		uni.reLaunch({
+		// 刷新小程序，以获取最新的token和userInfo，否则就要手动重新编译才能拿到
+		uni.navigateTo({
 			url: '/pages/index/index'
 		});
 	}

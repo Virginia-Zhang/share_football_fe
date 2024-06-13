@@ -11,7 +11,7 @@
 			@markertap="handleMarkerTap"
 			@tap="handleMapTap"
 		></map>
-		<view class="scan-box scan-title" v-if="isScan" @tap="handleScan">扫码借还</view>
+		<view class="scan-box scan-title" v-if="isScan" @tap="handleScan">扫码借还1</view>
 		<view class="scan-box marker-info" v-else>
 			<view class="scan-box-left">
 				<image :src="currentMarker?.iconPath" mode="widthFix"></image>
@@ -45,6 +45,7 @@ import { ref } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import api from '../../api';
 import { verifyLogin } from '../../utils';
+import { base64 } from '../../utils/base64';
 
 const longitude = ref(0);
 const latitude = ref(0);
@@ -79,10 +80,12 @@ onLoad(() => {
 				width: 40,
 				height: 40,
 				// latitude和longitude直接从数据库里取出来都是字符串，需要转成数字
-				latitude: +item.latitude,
-				longitude: +item.longitude
+				latitude: Number(item.latitude),
+				longitude: Number(item.longitude),
+				iconPath: base64
 			};
 		});
+		console.log('图片路径:', markers.value[0].iconPath);
 	});
 });
 
